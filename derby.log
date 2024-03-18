@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Mar 18 20:59:19 CET 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-018e-5325-a194-00000744c400 
+on database directory /home/bojanradovic/Desktop/delta-lake-slides/metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5ffd2b27 
+Loaded from file:/home/bojanradovic/spark-3.5.0-bin-hadoop3/jars/derby-10.14.2.0.jar
+java.vendor=Red Hat, Inc.
+java.runtime.version=11.0.22+7
+user.dir=/home/bojanradovic/Desktop/delta-lake-slides
+os.name=Linux
+os.arch=amd64
+os.version=6.7.9-100.fc38.x86_64
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
