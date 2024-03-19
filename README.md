@@ -1,6 +1,6 @@
 # Delta Lake Slides
 
-This repository contains slides template utilized for presentations on the Evolution of Data Architectures, Parquet files, and Delta Lake optimizations.
+This repository contains slides utilized for presentations on the Evolution of Data Architectures, Parquet files, and Delta Lake optimizations.
 
 ## Credits
 

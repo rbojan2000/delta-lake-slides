@@ -42,7 +42,16 @@
 				<h3>Table of contents:</h3>
 				<ol>
 					<li> <a href="#/2">Evolution of Data Architectures </a> </li>
+					<ol>
+						<li><a href="#2/1">Data Warehouse</a></li>
+						<li><a href="#2/2">Data Lake</a></li>
+						<li><a href="#2/4">Data Lakehouse</a></li>
+
+					</ol>
 					<li> <a href="#/3">Parquet File Format </a> </li>
+					<ol>
+						<li><a href="#3/1">Storage Layout Models</a></li>
+					</ol>
 					<li> <a href="#/4">Running Delta Lake </a> </li>
 					<li> <a href="#/5">References </a> </li>
 				</ol>
@@ -56,7 +65,8 @@
 					<figure>
 						<img width="80%" height="80%" class="r-frame" src="images/warehouse-arch.png"
 							alt="Data Warehouse Architecture">
-						<figcaption> <em> Figure 1-1: Data Warehouse Architecture </em></figcaption>
+						<figcaption style="font-size: xx-large;"> <em> Figure 1-1: Data Warehouse Architecture </em>
+						</figcaption>
 					</figure>
 				</section>
 				<section>
@@ -64,24 +74,32 @@
 					</figure>
 					<img width="40%" height="60%" class="r-frame" src="images/data-lake-arch.png"
 						alt="Data Lake Architecture">
-					<figcaption> <em> Figure 1-2: Data Lake Architecture </em> </figcaption>
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 1-2: Data Lake Architecture </em>
+					</figcaption>
 					</figure>
 				</section>
 				<section>
 					</figure>
 					<img class="r-frame" src="images/evolution-of-data-archs.png" alt="Data Lake Architecture">
-					<figcaption> <em> Figure 1-3. Evolution of Data Architectures </em> </figcaption>
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 1-3. Evolution of Data Architectures </em>
+					</figcaption>
 					</figure>
 				</section>
 				<section>
 					<h3>Data Lakehouse</h3>
 					</figure>
 					<img class="r-frame" src="images/data-lakehouse.png" alt="Data Lake Architecture">
-					<figcaption><em> Figure 1-4: Data Lakehouse Architecture </em></figcaption>
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 1-4: Data Lakehouse Architecture </em>
+					</figcaption>
 					</figure>
 				</section>
 				<section>
-					<h3>Delta lake provides the following features:</h3>
+					<h4>
+						Delta lake provides the following features: </h4>
+					<br>
 					<ul>
 						<li>Transactional ACID guarantees </li>
 						<li>Data versioning</li>
@@ -92,10 +110,12 @@
 					</ul>
 				</section>
 				<section>
-					<h3>The Medallion Architecture</h3>
+					<h4>The Medallion Architecture</h4>
 					</figure>
 					<img class="r-frame" src="images/data-lakehouse-solution.png" alt="Data Lake Architecture">
-					<figcaption><em> Figure 1-5: Data Lakehouse Solution Architecture </em></figcaption>
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 1-5: Data Lakehouse Solution Architecture </em>
+					</figcaption>
 					</figure>
 				</section>
 			</section>
@@ -105,6 +125,35 @@
 						style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
 					<h3>Column-Oriented Data File Format</h3>
 				</section>
+				<section>
+					<h4>Storage layout models</h4>
+					<div style="padding-bottom: 5%;">
+						<img src="images/storage-layout-models.png">
+						<figcaption style="font-size: xx-large;"><em> Figure 2-1: Row-wise/Columnar Physical and Logical
+								storage layout </em>
+						</figcaption>
+					</div>
+					<div
+						style="position: absolute; width: 30%; right: 35%; box-shadow: 0 1px 4px rgba(9, 9, 9, 0.5), 0 5px 25px rgba(27, 27, 27, 0.2); background-color: rgba(38, 38, 38, 0.9); color: #fff; font-size: 20px; text-align: left;">
+						<ul>
+							<li>partitioning</li>
+							<li>locality</li>
+							<li>I/O properties</li>
+						</ul>
+					</div>
+				</section>
+				<section>
+					<img src="images/hybrid-storage-layout.png">
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 2-2: Hybrid Physical and Logical storage layout </em>
+					</figcaption>
+				</section>
+				<section>
+					<img src="images/parquet-layout.png">
+					<figcaption style="font-size: xx-large;">
+						<em> Figure 2-3: Parquet file layout </em>
+					</figcaption>
+				</section>
 			</section>
 			<section>
 				<section>
@@ -112,18 +161,38 @@
 						style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
 					<h3>Running Delta Lake</h3>
 				</section>
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers>
+						val numRows = 1000000 // One million rows
+
+						val df = spark.range(numRows)
+
+						val randomId = udf(() => s"id${scala.util.Random.nextInt(1000)}")
+						val randomInt = udf(() => scala.util.Random.nextInt(100))
+						val randomLong = udf(() => scala.util.Random.nextLong())
+						val randomDouble = udf(() => scala.util.Random.nextDouble() * 100)
+
+						val testTable = df.withColumn("id1", randomId()).withColumn("id2", randomId()).withColumn("id3", randomId()).withColumn("id4", randomInt()).withColumn("id5", randomInt()).withColumn("id6", randomLong()).withColumn("v1", randomInt()).withColumn("v2", randomInt()).withColumn("v3", randomDouble())
+						testTable.write.format("delta").mode("append").save("/home/bojanradovic/Desktop/test-table")
+					</code></pre>
+					<figcaption style="font-size: xx-large;">
+						<em> Code 2-4: Creating test-table </em>
+					</figcaption>
+				</section>
 				<section>
 					<h3>Update Delta Table</h3>
 					<figure>
 						<img class="r-frame" src="images/updates-and-trans-log.png" alt="Data Warehouse Architecture">
-						<figcaption><em> Figure 2-1: Updates and the transaction log </em></figcaption>
+						<figcaption style="font-size: xx-large;"><em> Figure 3-1: Updates and the transaction log </em>
+						</figcaption>
 					</figure>
 				</section>
 				<section>
 					<h3>Final Data Read:</h3>
 					<figure>
 						<img class="r-frame" src="images/reading-after-upd.png" alt="Data Warehouse Architecture">
-						<figcaption><em> Figure 2-2: Reading after an update </em></figcaption>
+						<figcaption style="font-size: xx-large;"><em> Figure 3-2: Reading after an update </em>
+						</figcaption>
 					</figure>
 				</section>
 			</section>
@@ -139,7 +208,7 @@
 								and
 								<em>Running - Bennie Haelen </a> </em></li>
 					<li><em><a href="https://www.youtube.com/watch?v=1j8SdS7s_NY&t=1810s&ab_channel=Databricks"> Parquet
-								Format and Performance Optimization Opportunities - Boudewijn Braams(Databricks) </a>
+								Format and Performance Optimization Opportunities - Boudewijn Braams[Databricks] </a>
 						</em> </li>
 				</ul>
 			</section>
