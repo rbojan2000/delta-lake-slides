@@ -19,6 +19,14 @@
 
 	<!-- Theme used for syntax highlighting of code -->
 	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<style>
+		.zoom {
+		transition: transform .2s; /* Animation */
+		}
+		.zoom:hover {
+		transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+		}
+	</style>
 </head>
 
 <body>
@@ -32,7 +40,8 @@
 			<section>
 				<img src="https://miro.medium.com/v2/resize:fit:1000/0*Nc1-wTs2tC2P267-.png" alt="delta lake logo"
 					style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
-				<h2>Delta Lake</h2>
+				<h4> Building Data Lakehouse Architecture with Delta Lake </h4>
+				<br>
 				<p>
 					<small>Created by <a href="https://www.linkedin.com/in/bojan-radović-04708824a">Bojan
 							Radovic</a></small>
@@ -40,12 +49,12 @@
 			</section>
 			<section>
 				<h3>Table of contents:</h3>
-				<ol>
+				<ol style="font-size: xx-large;">
 					<li> <a href="#/2">Evolution of Data Architectures </a> </li>
 					<ol>
 						<li><a href="#2/1">Data Warehouse</a></li>
 						<li><a href="#2/2">Data Lake</a></li>
-						<li><a href="#2/4">Data Lakehouse</a></li>\
+						<li><a href="#2/4">Data Lakehouse</a></li>
 					</ol>
 					<li> <a href="#/3">Parquet File Format </a> </li>
 					<ol>
@@ -57,7 +66,11 @@
 					</ol>
 					<li><a href="#/5">Delta Lake Optimizations and Bench Testing</a></li>
 					<ol>
-						<li> <a href="#5/1"> Small File Compaction> </a></li>
+						<li> <a href="#5/1"> Small File Compaction </a></li>
+						<li> <a href="#5/3"> Data Skipping and Z-Ordering </a></li>
+						<li> <a href="#5/4"> Bench Test </a></li>
+						<li> <a href="#5/4"> Multi-part checkpointing </a></li>
+
 					</ol>
 					<li> <a href="#/6">References </a> </li>
 				</ol>
@@ -69,7 +82,7 @@
 				<section>
 					<h3>Data Warehouse</h3>
 					<figure>
-						<img width="80%" height="80%" class="r-frame" src="images/warehouse-arch.png"
+						<img class="zoom" width="80%" height="80%" src="images/warehouse-arch.png"
 							alt="Data Warehouse Architecture">
 						<figcaption style="font-size: xx-large;"> <em> Figure 1-1: Data Warehouse Architecture </em>
 						</figcaption>
@@ -78,7 +91,7 @@
 				<section>
 					<h3>Data Lake</h3>
 					</figure>
-					<img width="40%" height="60%" class="r-frame" src="images/data-lake-arch.png"
+					<img class="zoom" width="40%" height="60%" src="images/data-lake-arch.png"
 						alt="Data Lake Architecture">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 1-2: Data Lake Architecture </em>
@@ -87,7 +100,7 @@
 				</section>
 				<section>
 					</figure>
-					<img class="r-frame" src="images/evolution-of-data-archs.png" alt="Data Lake Architecture">
+					<img class="zoom" src="images/evolution-of-data-archs.png" alt="Data Lake Architecture">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 1-3. Evolution of Data Architectures </em>
 					</figcaption>
@@ -96,7 +109,7 @@
 				<section>
 					<h3>Data Lakehouse</h3>
 					</figure>
-					<img class="r-frame" src="images/data-lakehouse.png" alt="Data Lake Architecture">
+					<img class="zoom" src="images/data-lakehouse.png" alt="Data Lake Architecture">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 1-4: Data Lakehouse Architecture </em>
 					</figcaption>
@@ -118,7 +131,7 @@
 				<section>
 					<h4>The Medallion Architecture</h4>
 					</figure>
-					<img class="r-frame" src="images/data-lakehouse-solution.png" alt="Data Lake Architecture">
+					<img class="zoom" src="images/data-lakehouse-solution.png" alt="Data Lake Architecture">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 1-5: Data Lakehouse Solution Architecture </em>
 					</figcaption>
@@ -134,7 +147,7 @@
 				<section>
 					<h4>Storage layout models</h4>
 					<div style="padding-bottom: 5%;">
-						<img src="images/storage-layout-models.png">
+						<img class="zoom" src="images/storage-layout-models.png">
 						<figcaption style="font-size: xx-large;"><em> Figure 2-1: Row-wise/Columnar Physical and Logical
 								storage layout </em>
 						</figcaption>
@@ -149,13 +162,13 @@
 					</div>
 				</section>
 				<section>
-					<img src="images/hybrid-storage-layout.png">
+					<img class="zoom" src="images/hybrid-storage-layout.png">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 2-2: Hybrid Physical and Logical storage layout </em>
 					</figcaption>
 				</section>
 				<section>
-					<img src="images/parquet-layout.png">
+					<img class="zoom" src="images/parquet-layout.png">
 					<figcaption style="font-size: xx-large;">
 						<em> Figure 2-3: Parquet file layout </em>
 					</figcaption>
@@ -187,14 +200,14 @@
 				</section>
 				<section>
 					<figure>
-						<img class="r-frame" src="images/creating-test-table.png">
+						<img class="zoom" src="images/creating-test-table.png">
 						<figcaption style="font-size: xx-large;"><em> Code 3-2: test-table info and list CPU </em>
 						</figcaption>
 					</figure>
 				</section>
 				<section>
 					<figure>
-						<img class="r-frame" src="images/delta-table-architecture.png">
+						<img class="zoom" src="images/delta-table-architecture.png">
 						<figcaption style="font-size: xx-large;"><em> Code 3-3: test-table architecture tree </em>
 						</figcaption>
 					</figure>
@@ -371,15 +384,22 @@
 				<section>
 					<h4>Update Delta Table</h4>
 					<figure>
-						<img class="r-frame" src="images/updates-and-trans-log.png">
+						<img class="zoom" src="images/updates-and-trans-log.png">
 						<figcaption style="font-size: xx-large;"><em> Figure 3-5: Updates and the transaction log </em>
 						</figcaption>
 					</figure>
 				</section>
 				<section>
 					<figure>
-						<img class="r-frame" src="images/reading-after-upd.png" alt="Data Warehouse Architecture">
+						<img class="zoom" src="images/reading-after-upd.png">
 						<figcaption style="font-size: xx-large;"><em> Figure 3-6: Reading after an update </em>
+						</figcaption>
+					</figure>
+				</section>
+				<section>
+					<figure>
+						<img class="zoom" src="images/checkpoint1.png">
+						<figcaption style="font-size: xx-large;"><em> Figure 3-7: Checkpoint files </em>
 						</figcaption>
 					</figure>
 				</section>
@@ -391,7 +411,7 @@
 				<section>
 					<h3>Small File Compaction</h3>
 					<figure>
-						<img class="r-frame" src="images/compaction.png" alt="Data Warehouse Architecture">
+						<img src="images/compaction.png">
 						<figcaption style="font-size: xx-large;"><em> Figure 4-1: Bin packing small files in Data Lakes
 							</em>
 						</figcaption>
@@ -399,7 +419,7 @@
 				</section>
 				<section>
 					<figure>
-						<img class="r-frame" src="images/compaction-code.png" alt="Data Warehouse Architecture">
+						<img class="zoom" src="images/compaction-code.png">
 						<figcaption style="font-size: xx-large;"><em> Code 4-2: Executing Compaction Optimization
 							</em>
 						</figcaption>
@@ -409,25 +429,102 @@
 				<section>
 					<h3>Data skipping and Z-Ordering</h3>
 					<figure>
-						<img class="r-frame" src="images/z-order-operation.png" alt="Data Warehouse Architecture">
+						<img src="images/z-order-operation.png">
 						<figcaption style="font-size: xx-large;"><em> Figure 4-3: File skipping improves query
 								performance </em>
 						</figcaption>
 					</figure>
 				</section>
 				<section>
+					<h3>Bench Test</h3>
+					<ul>
+						<li>
+							Executing a query on the previously created test-table with
+							machine statistics displayed above:
+							<br>
+							<em>select id1, sum(v1) as v1 from x1 where id1 = 'id016'</em>
+						</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers>
+						(
+							spark.read.format("delta")
+							.option("versionAsOf", "0")
+							.load("/home/bojanradovic/Desktop/test-table")
+							.createOrReplaceTempView("x0")
+						)
+						
+						spark.sql(
+							"select id1, sum(v1) as v1 from x0 where id1 = 'id016'"
+						).collect()
+						</code></pre>
+					<figcaption style="font-size: xx-large;">
+						<em> Code 4-3: query on the Delta table when it’s initially created - 4.51 seconds
+						</em>
+					</figcaption>
+				</section>
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers>
+						(
+						delta_table = DeltaTable.forPath(spark, "/home/bojanradovic/Desktop/test-table")
+						delta_table.optimize().executeCompaction()						
+						)
+
+						(
+							spark.read.format("delta")
+							.option("versionAsOf", "1")
+							.load("/home/bojanradovic/Desktop/test-table")
+							.createOrReplaceTempView("x1")
+						)
+
+						spark.sql(
+							"select id1, sum(v1) as v1 from x1 where id1 = 'id016'"
+						).collect()
+						</code></pre>
+					<figcaption style="font-size: xx-large;">
+						<em> Code 4-4: query on the Delta table after compaction - 4.33 seconds
+						</em>
+					</figcaption>
+				</section>
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers>
+						(
+							delta.DeltaTable.forPath(spark, "/home/bojanradovic/Desktop/test-table")
+							.optimize()
+							.executeZOrderBy("id1")
+						)
+						(
+							spark.read.format("delta")
+							.option("versionAsOf", "2")
+							.load("/home/bojanradovic/Desktop/test-table")
+							.createOrReplaceTempView("x2")
+						)
+						spark.sql(
+							"select id1, sum(v1) as v1 from x2 where id1 = 'id016'"
+						).collect()
+						</code></pre>
+					<figcaption style="font-size: xx-large;">
+						<em> Code 4-5: query on the Delta table after z order by id1 - 0.6 seconds
+						</em>
+					</figcaption>
+				</section>
+				<section>
 					<figure>
-						<img class="r-frame" src="images/compaction-code.png" alt="Data Warehouse Architecture">
-						<figcaption style="font-size: xx-large;"><em> Code 4-2: Executing Compaction Optimization
-							</em>
+						<img src="images/bench-graph.png">
+						<figcaption style="font-size: xx-large;"><em> Figure 4-6: Delta query runtime by table type in
+								seconds on localhost </em>
 						</figcaption>
 					</figure>
 				</section>
+				<section>
+					<h3>Multi-part checkpointing</h3>
 
+				</section>
 
 			</section>
 			<section>
-				<h2>References</h2>
+				<h2>Sources Used </h2>
 				<ul>
 					<li><em><a
 								href="https://pl.seequality.net/delta-lake-101-part-3-optimize-zordering-and-file-pruning/">Delta
