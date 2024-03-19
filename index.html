@@ -45,15 +45,21 @@
 					<ol>
 						<li><a href="#2/1">Data Warehouse</a></li>
 						<li><a href="#2/2">Data Lake</a></li>
-						<li><a href="#2/4">Data Lakehouse</a></li>
-
+						<li><a href="#2/4">Data Lakehouse</a></li>\
 					</ol>
 					<li> <a href="#/3">Parquet File Format </a> </li>
 					<ol>
 						<li><a href="#3/1">Storage Layout Models</a></li>
 					</ol>
 					<li> <a href="#/4">Running Delta Lake </a> </li>
-					<li> <a href="#/5">References </a> </li>
+					<ol>
+						<li><a href="#2/4">Creating test-table Delta Table</a></li>
+					</ol>
+					<li><a href="#/5">Delta Lake Optimizations and Bench Testing</a></li>
+					<ol>
+						<li> <a href="#5/1"> Small File Compaction> </a></li>
+					</ol>
+					<li> <a href="#/6">References </a> </li>
 				</ol>
 			</section>
 			<section>
@@ -176,22 +182,226 @@
 						testTable.write.format("delta").mode("append").save("/home/bojanradovic/Desktop/test-table")
 					</code></pre>
 					<figcaption style="font-size: xx-large;">
-						<em> Code 2-4: Creating test-table </em>
+						<em> Code 3-1: Creating test-table Delta Table </em>
 					</figcaption>
 				</section>
 				<section>
-					<h3>Update Delta Table</h3>
 					<figure>
-						<img class="r-frame" src="images/updates-and-trans-log.png" alt="Data Warehouse Architecture">
-						<figcaption style="font-size: xx-large;"><em> Figure 3-1: Updates and the transaction log </em>
+						<img class="r-frame" src="images/creating-test-table.png">
+						<figcaption style="font-size: xx-large;"><em> Code 3-2: test-table info and list CPU </em>
 						</figcaption>
 					</figure>
 				</section>
 				<section>
-					<h3>Final Data Read:</h3>
+					<figure>
+						<img class="r-frame" src="images/delta-table-architecture.png">
+						<figcaption style="font-size: xx-large;"><em> Code 3-3: test-table architecture tree </em>
+						</figcaption>
+					</figure>
+				</section>
+				<section data-auto-animate>
+					<pre data-id="code-animation"><code class="hljs javascript" data-trim data-line-numbers>
+						----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+						~/Desktop/test-table/_delta_log » cat 00000000000000000000.json | jq                                                                                                      bojanradovic@fedora
+						{
+						  "commitInfo": {
+							"timestamp": 1710870170558,
+							"operation": "WRITE",
+							"operationParameters": {
+							  "mode": "Append",
+							  "partitionBy": "[]"
+							},
+							"isolationLevel": "Serializable",
+							"isBlindAppend": true,
+							"operationMetrics": {
+							  "numFiles": "12",
+							  "numOutputRows": "1000000",
+							  "numOutputBytes": "27500052"
+							},
+							"engineInfo": "Apache-Spark/3.5.0 Delta-Lake/3.0.0",
+							"txnId": "23302864-5126-4ce1-8192-44a41be67767"
+						  }
+						}
+						{
+						  "metaData": {
+							"id": "a5adb875-87a8-4aef-bddf-21518e036d0b",
+							"format": {
+							  "provider": "parquet",
+							  "options": {}
+							},
+							"schemaString": "{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"long\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id1\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id2\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id3\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id4\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id5\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"id6\",\"type\":\"long\",\"nullable\":true,\"metadata\":{}},{\"name\":\"v1\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"v2\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"v3\",\"type\":\"double\",\"nullable\":true,\"metadata\":{}}]}",
+							"partitionColumns": [],
+							"configuration": {},
+							"createdTime": 1710870167697
+						  }
+						}
+						{
+						  "protocol": {
+							"minReaderVersion": 1,
+							"minWriterVersion": 2
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00000-bde2d774-79fb-4005-a53c-3e8a77524a10-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2292253,
+							"modificationTime": 1710870170365,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":0,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223024252238046724,\"v1\":0,\"v2\":0,\"v3\":7.644427923669816E-4},\"maxValues\":{\"id\":83332,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223203646068081817,\"v1\":99,\"v2\":99,\"v3\":99.99977983109592},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00001-b3c0b032-76a3-4c1e-b6ae-c8ecb8789178-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291408,
+							"modificationTime": 1710870170230,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":83333,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223348645706272113,\"v1\":0,\"v2\":0,\"v3\":0.0013217244765328928},\"maxValues\":{\"id\":166665,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223070525282468187,\"v1\":99,\"v2\":99,\"v3\":99.99613405623346},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00002-7ac453a8-6348-4584-88de-172c21b52ce4-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291690,
+							"modificationTime": 1710870170321,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83334,\"minValues\":{\"id\":166666,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223228879911559519,\"v1\":0,\"v2\":0,\"v3\":3.0143943291482955E-4},\"maxValues\":{\"id\":249999,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223305961914213280,\"v1\":99,\"v2\":99,\"v3\":99.99910847128224},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00003-cafe4f53-b806-4189-9098-77103e9e9723-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291690,
+							"modificationTime": 1710870170456,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":250000,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223238515951007857,\"v1\":0,\"v2\":0,\"v3\":8.84900967035307E-4},\"maxValues\":{\"id\":333332,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223285771620491251,\"v1\":99,\"v2\":99,\"v3\":99.99910322400106},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00004-fa38f1e8-050b-44f2-95ea-49a4a2998ab5-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291576,
+							"modificationTime": 1710870170387,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":333333,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9222255781907489993,\"v1\":0,\"v2\":0,\"v3\":0.0024602423712161148},\"maxValues\":{\"id\":416665,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223217083022942345,\"v1\":99,\"v2\":99,\"v3\":99.99897641648099},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00005-ef10fa58-dfb0-4dd4-a462-62cca32bea8d-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291596,
+							"modificationTime": 1710870170525,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83334,\"minValues\":{\"id\":416666,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223161627491470080,\"v1\":0,\"v2\":0,\"v3\":0.003026567267039315},\"maxValues\":{\"id\":499999,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223047324209691022,\"v1\":99,\"v2\":99,\"v3\":99.99928900400351},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00006-d2d648bb-cb4a-4136-9da2-590194e2d41f-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291675,
+							"modificationTime": 1710870170458,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":500000,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9222730809892922135,\"v1\":0,\"v2\":0,\"v3\":1.10722975354971E-4},\"maxValues\":{\"id\":583332,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9222637325606376037,\"v1\":99,\"v2\":99,\"v3\":99.99712562199645},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00007-987498d9-200d-444f-969d-1b7bf917a5d3-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291689,
+							"modificationTime": 1710870170370,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":583333,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223245768467159812,\"v1\":0,\"v2\":0,\"v3\":6.051418843799894E-6},\"maxValues\":{\"id\":666665,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223360138144446881,\"v1\":99,\"v2\":99,\"v3\":99.99937133469028},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00008-e57d2144-5f0f-4505-83ef-656cf3ba7f58-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291552,
+							"modificationTime": 1710870170327,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83334,\"minValues\":{\"id\":666666,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223234961550847674,\"v1\":0,\"v2\":0,\"v3\":5.998996847611515E-4},\"maxValues\":{\"id\":749999,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9222686672594714437,\"v1\":99,\"v2\":99,\"v3\":99.99857541352597},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00009-236f9fce-0243-4130-ae88-fd288d589332-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291650,
+							"modificationTime": 1710870170310,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":750000,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9222940934083969183,\"v1\":0,\"v2\":0,\"v3\":9.21254021168938E-4},\"maxValues\":{\"id\":833332,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223308747717287761,\"v1\":99,\"v2\":99,\"v3\":99.99993848021153},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00010-9c139d29-b972-4338-a453-95ef5ecbfc3e-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291638,
+							"modificationTime": 1710870170387,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83333,\"minValues\":{\"id\":833333,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223277048105602578,\"v1\":0,\"v2\":0,\"v3\":0.0036259411251293727},\"maxValues\":{\"id\":916665,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223315876436795702,\"v1\":99,\"v2\":99,\"v3\":99.99973662544579},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						{
+						  "add": {
+							"path": "part-00011-5d1a06c9-9d67-4f25-8136-8216ed81fb59-c000.snappy.parquet",
+							"partitionValues": {},
+							"size": 2291635,
+							"modificationTime": 1710870170414,
+							"dataChange": true,
+							"stats": "{\"numRecords\":83334,\"minValues\":{\"id\":916666,\"id1\":\"id0\",\"id2\":\"id0\",\"id3\":\"id0\",\"id4\":0,\"id5\":0,\"id6\":-9223030482686508020,\"v1\":0,\"v2\":0,\"v3\":8.677069971430029E-5},\"maxValues\":{\"id\":999999,\"id1\":\"id999\",\"id2\":\"id999\",\"id3\":\"id999\",\"id4\":99,\"id5\":99,\"id6\":9223151132110459696,\"v1\":99,\"v2\":99,\"v3\":99.99760837085766},\"nullCount\":{\"id\":0,\"id1\":0,\"id2\":0,\"id3\":0,\"id4\":0,\"id5\":0,\"id6\":0,\"v1\":0,\"v2\":0,\"v3\":0}}"
+						  }
+						}
+						
+					</code></pre>
+					<figcaption style="font-size: xx-large;">
+						<em> Code 3-4: test-table transaction file example </em>
+					</figcaption>
+				</section>
+
+				<section>
+					<h4>Update Delta Table</h4>
+					<figure>
+						<img class="r-frame" src="images/updates-and-trans-log.png">
+						<figcaption style="font-size: xx-large;"><em> Figure 3-5: Updates and the transaction log </em>
+						</figcaption>
+					</figure>
+				</section>
+				<section>
 					<figure>
 						<img class="r-frame" src="images/reading-after-upd.png" alt="Data Warehouse Architecture">
-						<figcaption style="font-size: xx-large;"><em> Figure 3-2: Reading after an update </em>
+						<figcaption style="font-size: xx-large;"><em> Figure 3-6: Reading after an update </em>
+						</figcaption>
+					</figure>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Delta Lake Optimizations and Bench Testing</h3>
+				</section>
+				<section>
+					<h3>Small File Compaction</h3>
+					<figure>
+						<img class="r-frame" src="images/compaction.png" alt="Data Warehouse Architecture">
+						<figcaption style="font-size: xx-large;"><em> Figure 4-1: Bin packing small files in Data Lakes
+							</em>
+						</figcaption>
+					</figure>
+				</section>
+				<section>
+					<figure>
+						<img class="r-frame" src="images/compaction-code.png" alt="Data Warehouse Architecture">
+						<figcaption style="font-size: xx-large;"><em> Code 4-2: Executing Compaction Optimizations
+							</em>
 						</figcaption>
 					</figure>
 				</section>
