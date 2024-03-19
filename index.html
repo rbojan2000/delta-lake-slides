@@ -1,159 +1,174 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
 
-		<link rel="icon" href="https://avatars.githubusercontent.com/u/93132257?v=4" />
+	<link rel="icon" href="https://avatars.githubusercontent.com/u/93132257?v=4" />
 
-		<title>Delta Lake Slides</title>
+	<title>Delta Lake Slides</title>
 
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css" id="theme">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
 
-	<body>
+<body>
 
-		<div class="reveal">
+	<div class="reveal">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<!-- <div onclick="location.href='portable-display-stands.html';" id="smallbox">The content of the div here</div> -->
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<!-- <div onclick="location.href='portable-display-stands.html';" id="smallbox">The content of the div here</div> -->
 
-			<div class="slides">
+		<div class="slides">
+			<section>
+				<img src="https://miro.medium.com/v2/resize:fit:1000/0*Nc1-wTs2tC2P267-.png" alt="delta lake logo"
+					style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+				<h2>Delta Lake</h2>
+				<p>
+					<small>Created by <a href="https://www.linkedin.com/in/bojan-radović-04708824a">Bojan
+							Radovic</a></small>
+				</p>
+			</section>
+			<section>
+				<h3>Table of contents:</h3>
+				<ol>
+					<li> <a href="#/2">Evolution of Data Architectures </a> </li>
+					<li> <a href="#/3">Parquet File Format </a> </li>
+					<li> <a href="#/4">Running Delta Lake </a> </li>
+					<li> <a href="#/5">References </a> </li>
+				</ol>
+			</section>
+			<section>
 				<section>
-					<img src="https://miro.medium.com/v2/resize:fit:1000/0*Nc1-wTs2tC2P267-.png" alt="delta lake logo" style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
-					<h2>Delta Lake</h2>
-					<p>
-						<small>Created by <a href="https://www.linkedin.com/in/bojan-radović-04708824a">Bojan Radovic</a></small>
-					</p>
+					<h2>Evolution of Data Architectures</h2>
 				</section>
 				<section>
-					<h3>Table of contents:</h3>
-					<ol>
-						<li href="#/2"></li>>Evolution of Data Architectures</li>
-						<li href="#/3"></li>>Parquet File Format</li>
-						<li href="#/4"></li>>Running Delta Lake</li>
-						<li href="#/5"></li>>References</li>
-					</ol>
+					<h3>Data Warehouse</h3>
+					<figure>
+						<img width="80%" height="80%" class="r-frame" src="images/warehouse-arch.png"
+							alt="Data Warehouse Architecture">
+						<figcaption> <em> Figure 1-1: Data Warehouse Architecture </em></figcaption>
+					</figure>
 				</section>
 				<section>
-					<section>
-						<h2>Evolution of Data Architectures</h2>
-					</section>
-					<section>
-						<h3>Data Warehouse</h3>
-						<figure>
-							<img width="80%" height="80%" class="r-frame" src="images/warehouse-arch.png" alt="Data Warehouse Architecture">
-							<figcaption>Figure 1-1: Data Warehouse Architecture</figcaption>
-						</figure>
-					</section>
-					<section>
-						<h3>Data Lake</h3>
-						</figure>
-							<img width="40%" height="60%" class="r-frame" src="images/data-lake-arch.png" alt="Data Lake Architecture">
-							<figcaption>Figure 1-2: Data Lake Architecture</figcaption>
-						</figure>
-					</section>
-					<section>
-						</figure>
-							<img class="r-frame" src="images/evolution-of-data-archs.png" alt="Data Lake Architecture">
-							<figcaption>Figure 1-3. Evolution of Data Architectures</figcaption>
-						</figure>
-					</section>
-					<section>
-						<h3>Data Lakehouse</h3>
-						</figure>
-							<img class="r-frame" src="images/data-lakehouse.png" alt="Data Lake Architecture">
-							<figcaption>Figure 1-4: Data Lakehouse Architecture</figcaption>
-						</figure>
-					</section>
-					<section>
-						<h3>Delta lake provides the following features:</h3>
-						<ul>
-							<li>Transactional ACID guarantees	</li>
-							<li>Data versioning</li>
-							<li>Audit History</li>
-							<li>Indexing, caching and query optimisation</li>
-							<li>Unification of batch and streaming into one processing model</li>
-							<li>Schema enforcement and evolution</li>
-						</ul>
-					</section>
-					<section>
-						<h3>The Medallion Architecture</h3>
-						</figure>
-							<img class="r-frame" src="images/data-lakehouse-solution.png" alt="Data Lake Architecture">
-							<figcaption>Figure 1-5: Data Lakehouse Solution Architecture</figcaption>
-						</figure>
-					</section>	
+					<h3>Data Lake</h3>
+					</figure>
+					<img width="40%" height="60%" class="r-frame" src="images/data-lake-arch.png"
+						alt="Data Lake Architecture">
+					<figcaption> <em> Figure 1-2: Data Lake Architecture </em> </figcaption>
+					</figure>
 				</section>
 				<section>
-					<section>
-						<img src="https://spark.apache.org/images/Apache_Parquet_logo.png" alt="Apache Parquet logo" style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
-						<h4>Column-Oriented Data File Format</h4>
-					</section>
+					</figure>
+					<img class="r-frame" src="images/evolution-of-data-archs.png" alt="Data Lake Architecture">
+					<figcaption> <em> Figure 1-3. Evolution of Data Architectures </em> </figcaption>
+					</figure>
 				</section>
 				<section>
-					<section>
-						<h2>Running Delta Lake</h2>
-					</section>
-					<section>
-						<h3>Update Delta Table</h3>
-						<figure>
-							<img class="r-frame" src="images/updates-and-trans-log.png" alt="Data Warehouse Architecture">
-							<figcaption>Figure 2-1: Updates and the transaction log</figcaption>
-						</figure>	
-					</section>
-					<section>
-						<h3>Final Data Read:</h3>
-						<figure>
-							<img class="r-frame" src="images/reading-after-upd.png" alt="Data Warehouse Architecture">
-							<figcaption>Figure 2-2: Reading after an update</figcaption>
-						</figure>	
-					</section>
+					<h3>Data Lakehouse</h3>
+					</figure>
+					<img class="r-frame" src="images/data-lakehouse.png" alt="Data Lake Architecture">
+					<figcaption><em> Figure 1-4: Data Lakehouse Architecture </em></figcaption>
+					</figure>
 				</section>
 				<section>
-					<h2>References</h2>
-						<ul>
-							<li class="r-fit-text">https://pl.seequality.net/delta-lake-101-part-3-optimize-zordering-and-file-pruning/</li>
-							<li class="r-fit-text">https://docs.delta.io/</li>
-							<li class="r-fit-text">Delta Lake: Up and Running - Bennie Haelen</li>
-							<li class="r-fit-text">https://www.youtube.com/watch?v=dPb2ZXnt2_U&t=922s&ab_channel=DataWorksSummit</li>
-						</ul>
+					<h3>Delta lake provides the following features:</h3>
+					<ul>
+						<li>Transactional ACID guarantees </li>
+						<li>Data versioning</li>
+						<li>Audit History</li>
+						<li>Indexing, caching and query optimisation</li>
+						<li>Unification of batch and streaming into one processing model</li>
+						<li>Schema enforcement and evolution</li>
+					</ul>
 				</section>
-			</div>
-
+				<section>
+					<h3>The Medallion Architecture</h3>
+					</figure>
+					<img class="r-frame" src="images/data-lakehouse-solution.png" alt="Data Lake Architecture">
+					<figcaption><em> Figure 1-5: Data Lakehouse Solution Architecture </em></figcaption>
+					</figure>
+				</section>
+			</section>
+			<section>
+				<section>
+					<img src="https://spark.apache.org/images/Apache_Parquet_logo.png" alt="Apache Parquet logo"
+						style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+					<h3>Column-Oriented Data File Format</h3>
+				</section>
+			</section>
+			<section>
+				<section>
+					<img src="https://spark.apache.org/images/icon-orange-Delta-Table.svg" alt="Apache Parquet logo"
+						style="height: 180px; margin: 0 auto 4rem auto; background: transparent;" class="demo-logo">
+					<h3>Running Delta Lake</h3>
+				</section>
+				<section>
+					<h3>Update Delta Table</h3>
+					<figure>
+						<img class="r-frame" src="images/updates-and-trans-log.png" alt="Data Warehouse Architecture">
+						<figcaption><em> Figure 2-1: Updates and the transaction log </em></figcaption>
+					</figure>
+				</section>
+				<section>
+					<h3>Final Data Read:</h3>
+					<figure>
+						<img class="r-frame" src="images/reading-after-upd.png" alt="Data Warehouse Architecture">
+						<figcaption><em> Figure 2-2: Reading after an update </em></figcaption>
+					</figure>
+				</section>
+			</section>
+			<section>
+				<h2>References</h2>
+				<ul>
+					<li><em><a
+								href="https://pl.seequality.net/delta-lake-101-part-3-optimize-zordering-and-file-pruning/">Delta
+								<em>Lake 101 Part 3: Optimize ZOrdering and File Pruning - Adrian Chodkowski </a> </em>
+					</li>
+					<li><em><a href="https://docs.delta.io/latest/index.html"> Delta Lake documentation </a> </em></li>
+					<li><em><a href="https://www.oreilly.com/library/view/delta-lake-up/9781098139711/"> Delta Lake: Up
+								and
+								<em>Running - Bennie Haelen </a> </em></li>
+					<li><em><a href="https://www.youtube.com/watch?v=1j8SdS7s_NY&t=1810s&ab_channel=Databricks"> Parquet
+								Format and Performance Optimization Opportunities - Boudewijn Braams(Databricks) </a>
+						</em> </li>
+				</ul>
+			</section>
 		</div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/zoom/zoom.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/search/search.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
+	</div>
 
-			// Also available as an ES module, see:
-			// https://revealjs.com/initialization/
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				center: true,
-				hash: true,
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/zoom/zoom.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/search/search.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight ]
-			});
+		// Also available as an ES module, see:
+		// https://revealjs.com/initialization/
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
 
-		</script>
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight]
+		});
 
-	</body>
+	</script>
+
+</body>
+
 </html>
